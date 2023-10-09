@@ -51,7 +51,7 @@
         <div class="links">
             <table>
                 <thead>
-                    <th />
+                    <!-- <th /> -->
                     <th>
                         <span :sortType="links.sort.field == 'author' ? links.sort.type : 0" @click="toggleSort('author')">Author <font-awesome-icon icon="sort-down" /></span>
                     </th>
@@ -67,7 +67,7 @@
                     <th>
                         <span :sortType="links.sort.field == 'visits' ? links.sort.type : 0" @click="toggleSort('visits')">Visits <font-awesome-icon icon="sort-down" /></span>
                     </th>
-                    <th />
+                    <!-- <th /> -->
                 </thead>
                 <tr v-for="link in links.links" :key="link.id" class="link">
                     <td>
@@ -84,7 +84,9 @@
                     <td class="slug">
                         <strong>Slug:&nbsp;</strong>
                         <span>
-                            <a :href="`/${link.slug}`" target="_blank">{{ link.slug }}</a></span>
+                            <a :href="`/${link.slug}`" target="_blank">{{ link.slug }}</a>
+                            <span @click="copyUrl"><font-awesome-icon icon="copy" /></span>
+                        </span>
                     </td>
                     <td class="destination">
                         <strong>Destination:&nbsp;</strong>
@@ -336,6 +338,16 @@ export default {
         applySort() {
             this.links.clear();
             this.loadMore();
+        },
+        copyUrl() {
+            const url = window.location.origin + '/' + this.link.slug;
+            navigator.clipboard.writeText(url)
+              .then(() => {
+                console.log('URL copied to clipboard');
+              })
+              .catch((error) => {
+                console.error('Failed to copy URL: ', error);
+              });
         },
     },
 };
